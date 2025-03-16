@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import { FC, memo } from 'react';
 import { Tab } from '@zlden/react-developer-burger-ui-components';
 
 import styles from './burger-ingredients.module.css';
@@ -18,28 +18,27 @@ export const BurgerIngredientsUI: FC<BurgerIngredientsUIProps> = memo(
     mainsRef,
     saucesRef,
     onTabClick
-  }) => (
-    <>
+  }) => {
+    const tabs = [
+      { value: 'bun', label: 'Булки' },
+      { value: 'main', label: 'Начинки' },
+      { value: 'sauce', label: 'Соусы' }
+    ];
+
+    return (
       <section className={styles.burger_ingredients}>
         <nav>
           <ul className={styles.menu}>
-            <Tab value='bun' active={currentTab === 'bun'} onClick={onTabClick}>
-              Булки
-            </Tab>
-            <Tab
-              value='main'
-              active={currentTab === 'main'}
-              onClick={onTabClick}
-            >
-              Начинки
-            </Tab>
-            <Tab
-              value='sauce'
-              active={currentTab === 'sauce'}
-              onClick={onTabClick}
-            >
-              Соусы
-            </Tab>
+            {tabs.map(({ value, label }) => (
+              <Tab
+                key={value}
+                value={value}
+                active={currentTab === value}
+                onClick={onTabClick}
+              >
+                {label}
+              </Tab>
+            ))}
           </ul>
         </nav>
         <div className={styles.content}>
@@ -63,6 +62,6 @@ export const BurgerIngredientsUI: FC<BurgerIngredientsUIProps> = memo(
           />
         </div>
       </section>
-    </>
-  )
+    );
+  }
 );
