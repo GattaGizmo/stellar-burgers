@@ -1,16 +1,14 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 import styles from './constructor-page.module.css';
 
-import { ConstructorPageUIProps } from './type';
+import { BurgerConstructor, BurgerIngredients } from '@components';
 import { Preloader } from '@ui';
-import { BurgerIngredients, BurgerConstructor } from '@components';
+import { ConstructorPageUIProps } from './type';
 
-export const ConstructorPageUI: FC<ConstructorPageUIProps> = ({
-  isIngredientsLoading
-}) => (
-  <>
-    {isIngredientsLoading ? (
+export const ConstructorPageUI: FC<ConstructorPageUIProps> = memo(
+  ({ isIngredientsLoading }) =>
+    isIngredientsLoading ? (
       <Preloader />
     ) : (
       <main className={styles.containerMain}>
@@ -24,6 +22,5 @@ export const ConstructorPageUI: FC<ConstructorPageUIProps> = ({
           <BurgerConstructor />
         </div>
       </main>
-    )}
-  </>
+    )
 );
