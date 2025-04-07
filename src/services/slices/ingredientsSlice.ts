@@ -2,7 +2,7 @@ import { getIngredientsApi } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 
-interface IngredientsState {
+export interface IngredientsState {
   ingredients: TIngredient[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   isLoading: boolean;
@@ -18,7 +18,7 @@ const initialState: IngredientsState = {
 
 export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchIngredients',
-  async () => await getIngredientsApi()
+  getIngredientsApi
 );
 
 const ingredientsSlice = createSlice({
@@ -28,7 +28,8 @@ const ingredientsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
-        Object.assign(state, { status: 'loading', isLoading: true });
+        state.status = 'loading';
+        state.isLoading = true;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
         state.status = 'succeeded';
@@ -38,7 +39,7 @@ const ingredientsSlice = createSlice({
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.status = 'failed';
         state.isLoading = false;
-        state.error = action.error?.message ?? null;
+        state.error = action.error.message || null;
       });
   }
 });

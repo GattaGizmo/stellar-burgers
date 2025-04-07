@@ -1,9 +1,9 @@
-import { FC, memo } from 'react';
 import { Tab } from '@zlden/react-developer-burger-ui-components';
+import { FC, memo } from 'react';
 
+import { IngredientsCategory } from '@components';
 import styles from './burger-ingredients.module.css';
 import { BurgerIngredientsUIProps } from './type';
-import { IngredientsCategory } from '@components';
 
 export const BurgerIngredientsUI: FC<BurgerIngredientsUIProps> = memo(
   ({
@@ -18,27 +18,28 @@ export const BurgerIngredientsUI: FC<BurgerIngredientsUIProps> = memo(
     mainsRef,
     saucesRef,
     onTabClick
-  }) => {
-    const tabs = [
-      { value: 'bun', label: 'Булки' },
-      { value: 'main', label: 'Начинки' },
-      { value: 'sauce', label: 'Соусы' }
-    ];
-
-    return (
+  }) => (
+    <>
       <section className={styles.burger_ingredients}>
         <nav>
           <ul className={styles.menu}>
-            {tabs.map(({ value, label }) => (
-              <Tab
-                key={value}
-                value={value}
-                active={currentTab === value}
-                onClick={onTabClick}
-              >
-                {label}
-              </Tab>
-            ))}
+            <Tab value='bun' active={currentTab === 'bun'} onClick={onTabClick}>
+              Булки
+            </Tab>
+            <Tab
+              value='main'
+              active={currentTab === 'main'}
+              onClick={onTabClick}
+            >
+              Начинки
+            </Tab>
+            <Tab
+              value='sauce'
+              active={currentTab === 'sauce'}
+              onClick={onTabClick}
+            >
+              Соусы
+            </Tab>
           </ul>
         </nav>
         <div className={styles.content}>
@@ -47,21 +48,24 @@ export const BurgerIngredientsUI: FC<BurgerIngredientsUIProps> = memo(
             titleRef={titleBunRef}
             ingredients={buns}
             ref={bunsRef}
+            data-cy='bun-ingredients'
           />
           <IngredientsCategory
             title='Начинки'
             titleRef={titleMainRef}
             ingredients={mains}
             ref={mainsRef}
+            data-cy='main-ingredients'
           />
           <IngredientsCategory
             title='Соусы'
             titleRef={titleSaucesRef}
             ingredients={sauces}
             ref={saucesRef}
+            data-cy='sauce-ingredients'
           />
         </div>
       </section>
-    );
-  }
+    </>
+  )
 );

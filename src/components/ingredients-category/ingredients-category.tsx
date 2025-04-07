@@ -7,19 +7,22 @@ import { TIngredientsCategoryProps } from './type';
 export const IngredientsCategory = forwardRef<
   HTMLUListElement,
   TIngredientsCategoryProps
->(({ title, titleRef, ingredients }, ref) => {
+>(({ title, titleRef, ingredients, ...rest }, ref) => {
   const { bun, ingredients: selectedIngredients } = useAppSelector(
     (state) => state.order
   );
 
   const ingredientsCounters = useMemo(() => {
+    if (!selectedIngredients.length && !bun) return {};
+
     const counters: Record<string, number> = {};
 
-    if (bun) counters[bun._id] = 2;
-
-    selectedIngredients.forEach(({ _id }) => {
-      counters[_id] = (counters[_id] || 0) + 1;
+    selectedIngredients.forEach((ingredient: TIngredient) => {
+      counters[ingredient._id] ??= 0;
+      counters[ingredient._id]++;
     });
+
+    if (bun) counters[bun._id] = 2;
 
     return counters;
   }, [bun, selectedIngredients]);
@@ -31,6 +34,7 @@ export const IngredientsCategory = forwardRef<
       ingredients={ingredients}
       ingredientsCounters={ingredientsCounters}
       ref={ref}
+      {...rest}
     />
   );
 });

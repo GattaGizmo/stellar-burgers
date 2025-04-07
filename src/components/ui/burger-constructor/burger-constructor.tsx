@@ -17,95 +17,95 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   orderModalData,
   onOrderClick,
   closeOrderModal
-}) => {
-  const { bun, ingredients } = constructorItems;
-
-  return (
-    <section className={styles.burger_constructor}>
-      {bun ? (
-        <div className={`${styles.element} mb-4 mr-4`}>
-          <ConstructorElement
-            type='top'
-            isLocked
-            text={`${bun.name} (верх)`}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
-        </div>
-      ) : (
-        <div
-          className={`${styles.noBuns} ${styles.noBunsTop} ml-8 mb-4 mr-5 text text_type_main-default`}
-        >
-          Выберите булки
-        </div>
-      )}
-
-      <ul className={styles.elements}>
-        {ingredients.length > 0 ? (
-          ingredients.map((item: TConstructorIngredient, index: number) => (
+}) => (
+  <section className={styles.burger_constructor} data-cy='burger-constructor'>
+    {constructorItems.bun ? (
+      <div
+        className={`${styles.element} mb-4 mr-4`}
+        data-cy='constructor-bun-1'
+      >
+        <ConstructorElement
+          type='top'
+          isLocked
+          text={`${constructorItems.bun.name} (верх)`}
+          price={constructorItems.bun.price}
+          thumbnail={constructorItems.bun.image}
+        />
+      </div>
+    ) : (
+      <div
+        className={`${styles.noBuns} ${styles.noBunsTop} ml-8 mb-4 mr-5 text text_type_main-default`}
+      >
+        Выберите булки
+      </div>
+    )}
+    <ul className={styles.elements}>
+      {constructorItems.ingredients.length > 0 &&
+        constructorItems.ingredients.map(
+          (item: TConstructorIngredient, index: number) => (
             <BurgerConstructorElement
-              key={item.uniqueId}
               ingredient={item}
               index={index}
-              totalItems={ingredients.length}
+              totalItems={constructorItems.ingredients.length}
+              key={item.uniqueId}
             />
-          ))
-        ) : (
-          <div
-            className={`${styles.noBuns} ml-8 mb-4 mr-5 text text_type_main-default`}
-          >
-            Выберите начинку
-          </div>
+          )
         )}
-      </ul>
-
-      {bun ? (
-        <div className={`${styles.element} mt-4 mr-4`}>
-          <ConstructorElement
-            type='bottom'
-            isLocked
-            text={`${bun.name} (низ)`}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
-        </div>
-      ) : (
+      {!constructorItems.ingredients.length && (
         <div
-          className={`${styles.noBuns} ${styles.noBunsBottom} ml-8 mb-4 mr-5 text text_type_main-default`}
+          className={`${styles.noBuns} ml-8 mb-4 mr-5 text text_type_main-default`}
         >
-          Выберите булки
+          Выберите начинку
         </div>
       )}
-
-      <div className={`${styles.total} mt-10 mr-4`}>
-        <div className={`${styles.cost} mr-10`}>
-          <p className={`text ${styles.text} mr-2`}>{price}</p>
-          <CurrencyIcon type='primary' />
-        </div>
-        <Button
-          htmlType='button'
-          type='primary'
-          size='large'
-          onClick={onOrderClick}
-        >
-          Оформить заказ
-        </Button>
+    </ul>
+    {constructorItems.bun ? (
+      <div
+        className={`${styles.element} mt-4 mr-4`}
+        data-cy='constructor-bun-2'
+      >
+        <ConstructorElement
+          type='bottom'
+          isLocked
+          text={`${constructorItems.bun.name} (низ)`}
+          price={constructorItems.bun.price}
+          thumbnail={constructorItems.bun.image}
+        />
       </div>
+    ) : (
+      <div
+        className={`${styles.noBuns} ${styles.noBunsBottom} ml-8 mb-4 mr-5 text text_type_main-default`}
+      >
+        Выберите булки
+      </div>
+    )}
+    <div className={`${styles.total} mt-10 mr-4`} data-cy='order-summary'>
+      <div className={`${styles.cost} mr-10`}>
+        <p className={`text ${styles.text} mr-2`}>{price}</p>
+        <CurrencyIcon type='primary' />
+      </div>
+      <Button
+        htmlType='button'
+        type='primary'
+        size='large'
+        children='Оформить заказ'
+        onClick={onOrderClick}
+      />
+    </div>
 
-      {orderRequest && (
-        <Modal onClose={closeOrderModal} title={'Оформляем заказ...'}>
-          <Preloader />
-        </Modal>
-      )}
+    {orderRequest && (
+      <Modal onClose={closeOrderModal} title={'Оформляем заказ...'}>
+        <Preloader />
+      </Modal>
+    )}
 
-      {orderModalData && (
-        <Modal
-          onClose={closeOrderModal}
-          title={orderRequest ? 'Оформляем заказ...' : ''}
-        >
-          <OrderDetailsUI orderNumber={orderModalData.number} />
-        </Modal>
-      )}
-    </section>
-  );
-};
+    {orderModalData && (
+      <Modal
+        onClose={closeOrderModal}
+        title={orderRequest ? 'Оформляем заказ...' : ''}
+      >
+        <OrderDetailsUI orderNumber={orderModalData.number} />
+      </Modal>
+    )}
+  </section>
+);

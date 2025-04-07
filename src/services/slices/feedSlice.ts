@@ -1,10 +1,11 @@
 import { getFeedsApi } from '@api';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 
-interface FeedState {
+export interface FeedState {
   orders: TOrder[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  isLoading: boolean;
   error: string | null;
   total: number | null;
   totalToday: number | null;
@@ -13,22 +14,13 @@ interface FeedState {
 const initialState: FeedState = {
   orders: [],
   status: 'idle',
+  isLoading: false,
   error: null,
   total: null,
   totalToday: null
 };
 
-export const fetchFeed = createAsyncThunk(
-  'feed/fetchFeed',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await getFeedsApi();
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error?.message ?? 'Ошибка загрузки данных');
-    }
-  }
-);
+export const fetchFeed = createAsyncThunk('feed/fetchFeed', getFeedsApi);
 
 const feedSlice = createSlice({
   name: 'feed',
@@ -37,31 +29,20 @@ const feedSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchFeed.pending, (state) => {
-        Object.assign(state, { status: 'loading' });
+        state.status = 'loading';
+        state.isLoading = true;
       })
-      .addCase(
-        fetchFeed.fulfilled,
-        (
-          state,
-          action: PayloadAction<{
-            orders: TOrder[];
-            total: number;
-            totalToday: number;
-          }>
-        ) => {
-          Object.assign(state, {
-            status: 'succeeded',
-            orders: action.payload.orders,
-            total: action.payload.total,
-            totalToday: action.payload.totalToday
-          });
-        }
-      )
+      .addCase(fetchFeed.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.orders = action.payload.orders;
+        state.total = action.payload.total;
+        state.totalToday = action.payload.totalToday;
+        state.isLoading = false;
+      })
       .addCase(fetchFeed.rejected, (state, action) => {
-        Object.assign(state, {
-          status: 'failed',
-          error: action.payload as string
-        });
+        state.status = 'failed';
+        state.error = action.error.message || null;
+        state.isLoading = false;
       });
   }
 });

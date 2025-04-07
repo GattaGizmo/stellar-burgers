@@ -23,7 +23,7 @@ const initialState: OrderState = {
 
 export const fetchOrder = createAsyncThunk(
   'order/fetchOrder',
-  async (ingredientIds: string[]) => orderBurgerApi(ingredientIds)
+  (ingredientIds: string[]) => orderBurgerApi(ingredientIds)
 );
 
 const orderSlice = createSlice({
@@ -45,17 +45,15 @@ const orderSlice = createSlice({
       }
     },
     removeIngredient: (state, action) => {
-      state.ingredients = state.ingredients.filter(
-        (_, idx) => idx !== action.payload
-      );
+      state.ingredients.splice(action.payload, 1);
     },
     moveIngredient: (state, action) => {
       const { index, direction } = action.payload;
-      const targetIndex = direction === 'up' ? index - 1 : index + 1;
+      const newIndex = direction === 'up' ? index - 1 : index + 1;
 
-      if (targetIndex >= 0 && targetIndex < state.ingredients.length) {
-        [state.ingredients[index], state.ingredients[targetIndex]] = [
-          state.ingredients[targetIndex],
+      if (newIndex >= 0 && newIndex < state.ingredients.length) {
+        [state.ingredients[index], state.ingredients[newIndex]] = [
+          state.ingredients[newIndex],
           state.ingredients[index]
         ];
       }
@@ -77,10 +75,10 @@ const orderSlice = createSlice({
         state.ingredients = [];
         state.bun = null;
       })
-      .addCase(fetchOrder.rejected, (state) => {
+      .addCase(fetchOrder.rejected, (state, action) => {
         state.status = 'failed';
         state.isLoading = false;
-        state.error = 'Failed to create order';
+        state.error = action.error.message || null;
       });
   }
 });
@@ -92,5 +90,4 @@ export const {
   moveIngredient,
   clearOrderModalData
 } = orderSlice.actions;
-
 export default orderSlice.reducer;
