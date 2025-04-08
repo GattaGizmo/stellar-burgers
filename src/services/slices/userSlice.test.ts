@@ -5,7 +5,8 @@ import userReducer, {
 	logoutUser,
 	registerUser,
 	updateUserDetails,
-	UserState
+	UserState,
+	initialState
 } from './userSlice';
 
 jest.mock('@api', () => ({
@@ -18,16 +19,6 @@ jest.mock('@api', () => ({
 }));
 
 describe('тесты для работы с данными пользователя', () => {
-	const initialState: UserState = {
-		user: null,
-		orders: null,
-		status: 'idle',
-		isLoading: false,
-		isAuthChecked: false,
-		isAuthenticated: false,
-		error: null
-	};
-
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});

@@ -14,7 +14,7 @@ describe('Тестирование процесса заказа', () => {
 		);
 		cy.setCookie('accessToken', 'test-access-token');
 		cy.viewport(1300, 800);
-		cy.visit('http://localhost:4000/');
+		cy.visit('/');
 		cy.wait('@getIngredients', { timeout: 20000 });
 	});
 

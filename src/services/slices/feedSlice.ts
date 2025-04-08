@@ -11,7 +11,7 @@ export interface FeedState {
   totalToday: number | null;
 }
 
-const initialState: FeedState = {
+export const initialState: FeedState = {
   orders: [],
   status: 'idle',
   isLoading: false,

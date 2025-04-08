@@ -4,7 +4,8 @@ import orderReducer, {
 	fetchOrder,
 	moveIngredient,
 	removeIngredient,
-	setBun
+	setBun,
+	initialState
 } from './ordersSlice';
 
 jest.mock('@api', () => ({
@@ -26,15 +27,6 @@ describe('редьюсер для данных заказа', () => {
 		image_large: 'https://code.s3.yandex.net/react/code/bun-02-large.png',
 		id: '1',
 		uniqueId: 'test-unique-id'
-	};
-
-	const initialState = {
-		bun: null,
-		ingredients: [],
-		status: 'idle' as const,
-		isLoading: false,
-		orderModalData: null,
-		error: null
 	};
 
 	beforeEach(() => {

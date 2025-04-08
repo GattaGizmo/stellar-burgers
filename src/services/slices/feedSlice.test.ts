@@ -1,19 +1,10 @@
-import feedReducer, { FeedState, fetchFeed } from './feedSlice';
+import feedReducer, { FeedState, fetchFeed, initialState } from './feedSlice';
 
 jest.mock('@api', () => ({
 	getFeedsApi: jest.fn(),
 }));
 
 describe('редьюсер ленты заказов', () => {
-	const initialState: FeedState = {
-		orders: [],
-		status: 'idle',
-		isLoading: false,
-		error: null,
-		total: null,
-		totalToday: null,
-	};
-
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});

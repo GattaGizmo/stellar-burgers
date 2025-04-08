@@ -12,7 +12,7 @@ interface OrderState {
   error: string | null;
 }
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   bun: null,
   ingredients: [],
   status: 'idle',

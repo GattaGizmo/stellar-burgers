@@ -1,6 +1,7 @@
 import ingredientsReducer, {
 	fetchIngredients,
-	IngredientsState
+	IngredientsState,
+	initialState
 } from './ingredientsSlice';
 
 jest.mock('@api', () => ({
@@ -8,13 +9,6 @@ jest.mock('@api', () => ({
 }));
 
 describe('редьюсер ингредиентов', () => {
-	const initialState: IngredientsState = {
-		ingredients: [],
-		status: 'idle',
-		isLoading: false,
-		error: null
-	};
-
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
